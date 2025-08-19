@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Language Detection</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='images/hand.ico') }}">
+</head>
+<body>
+  <div class="layout">
+    <!-- Left: camera stream -->
+    <div class="video-wrap">
+      <img id="video" src="{{ url_for('video') }}" alt="camera stream" />
+    </div>
+
+    <!-- Right: sidebar with predictions -->
+    <aside class="sidebar">
+      <h2>Prediction</h2>
+      <div class="big-letter" id="current-letter">??</div>
+
+      <div class="meters">
+        <div class="meter">
+          <label>Confidence</label>
+          <div class="bar"><div id="conf-bar" class="fill" style="width:0%"></div></div>
+          <span id="conf-val">0%</span>
+        </div>
+        <div class="meter">
+          <label>Stability</label>
+          <div class="bar"><div id="stab-bar" class="fill" style="width:0%"></div></div>
+          <span id="stab-val">0%</span>
+        </div>
+      </div>
+
+      <h3>Sentence</h3>
+      <!-- <div id="sentence" class="sentence"></div> -->
+      <textarea id="sentence" class="sentence" rows="3"></textarea>
+      
+      <div class="actions">
+        <button id="btn-backspace" class="btn">Backspace</button>
+        <button id="btn-space" class="btn">Space</button>
+        <button id="btn-clear" class="btn btn-ghost">Clear</button>
+        <button id="btn-speak" class="btn">🔊</button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- 👇 New Section: Instructions + Gesture Gallery -->
+  <section class="instructions">
+    <h2>Instructions</h2>
+    <ul>
+      <li>Use good lighting so your hand is clearly visible.</li>
+      <li>Hold your hand steady for best accuracy.</li>
+      <li>Show one sign at a time, fully inside the camera frame.</li>
+    </ul>
+  </section>
+
+  <section class="gallery">
+    <h2>Gesture Reference</h2>
+    <input type="text" id="searchInput" placeholder="Search the letter">
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Dummy images (replace with real ones later) -->
+      <div class="card" data-letter="A"><img src="{{ url_for('static', filename='images/A.jpg') }}" alt="A"><p>A</p></div>
+      <div class="card" data-letter="B"><img src="{{ url_for('static', filename='images/B.jpg') }}" alt="B"><p>B</p></div>
+      <div class="card" data-letter="C"><img src="{{ url_for('static', filename='images/C.jpg') }}" alt="C"><p>C</p></div>
+      <div class="card" data-letter="D"><img src="{{ url_for('static', filename='images/D.jpg') }}" alt="D"><p>D</p></div>
+      <div class="card" data-letter="E"><img src="{{ url_for('static', filename='images/E.jpg') }}" alt="E"><p>E</p></div>
+      <div class="card" data-letter="F"><img src="{{ url_for('static', filename='images/F.jpg') }}" alt="F"><p>F</p></div>
+      <div class="card" data-letter="G"><img src="{{ url_for('static', filename='images/G.jpg') }}" alt="G"><p>G</p></div>
+      <div class="card" data-letter="H"><img src="{{ url_for('static', filename='images/H.jpg') }}" alt="H"><p>H</p></div>
+      <div class="card" data-letter="I"><img src="{{ url_for('static', filename='images/I.jpg') }}" alt="I"><p>I</p></div>
+      <div class="card" data-letter="J"><img src="{{ url_for('static', filename='images/J.jpg') }}" alt="J"><p>J</p></div>
+      <div class="card" data-letter="K"><img src="{{ url_for('static', filename='images/K.jpg') }}" alt="K"><p>K</p></div>
+      <div class="card" data-letter="L"><img src="{{ url_for('static', filename='images/L.jpg') }}" alt="L"><p>L</p></div>
+      <div class="card" data-letter="M"><img src="{{ url_for('static', filename='images/M.jpg') }}" alt="M"><p>M</p></div>
+      <div class="card" data-letter="N"><img src="{{ url_for('static', filename='images/N.jpg') }}" alt="N"><p>N</p></div>
+      <div class="card" data-letter="O"><img src="{{ url_for('static', filename='images/O.jpg') }}" alt="O"><p>O</p></div>
+      <div class="card" data-letter="P"><img src="{{ url_for('static', filename='images/P.jpg') }}" alt="P"><p>P</p></div>
+      <div class="card" data-letter="Q"><img src="{{ url_for('static', filename='images/Q.jpg') }}" alt="Q"><p>Q</p></div>
+      <div class="card" data-letter="R"><img src="{{ url_for('static', filename='images/R.jpg') }}" alt="R"><p>R</p></div>
+      <div class="card" data-letter="S"><img src="{{ url_for('static', filename='images/S.jpg') }}" alt="S"><p>S</p></div>
+      <div class="card" data-letter="T"><img src="{{ url_for('static', filename='images/T.jpg') }}" alt="T"><p>T</p></div>
+      <div class="card" data-letter="U"><img src="{{ url_for('static', filename='images/U.jpg') }}" alt="U"><p>U</p></div>
+      <div class="card" data-letter="V"><img src="{{ url_for('static', filename='images/V.jpg') }}" alt="V"><p>V</p></div>
+      <div class="card" data-letter="W"><img src="{{ url_for('static', filename='images/W.jpg') }}" alt="W"><p>W</p></div>
+      <div class="card" data-letter="X"><img src="{{ url_for('static', filename='images/X.jpg') }}" alt="X"><p>X</p></div>
+      <div class="card" data-letter="Y"><img src="{{ url_for('static', filename='images/Y.jpg') }}" alt="Y"><p>Y</p></div>
+      <div class="card" data-letter="Z"><img src="{{ url_for('static', filename='images/Z.jpg') }}" alt="Z"><p>Z</p></div>
+      <!-- ...continue for all letters + space -->
+      <div class="card" data-letter="Space"><img src="{{ url_for('static', filename='images/Space.jpg') }}" alt="Space"><p>Space</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Sign Language Detection App | Made with ❤️</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
