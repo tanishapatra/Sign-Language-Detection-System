@@ -11,8 +11,10 @@
   <div class="layout">
     <!-- Left: camera stream -->
     <div class="video-wrap">
-      <img id="video" src="{{ url_for('video') }}" alt="camera stream" />
+      <video id="video" autoplay playsinline width="480" height="360"></video>
+      
     </div>
+
 
     <!-- Right: sidebar with predictions -->
     <aside class="sidebar">
